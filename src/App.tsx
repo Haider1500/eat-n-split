@@ -39,6 +39,20 @@ function App() {
     }
     setIsInputBoxOpen(false);
   }
+
+  function handleBillSplit(value: number) {
+    console.log(value, "========value");
+    const updatedList = friendList.map((friend: any) => {
+      if (friend.id == selectedFriend.id) {
+        console.log(friend, "=======friend");
+        console.log(friend.balance, "=======friendBalance");
+        return { ...friend, balance: friend.balance + value };
+      }
+      return friend;
+    });
+    setFriendList(updatedList);
+    setSelectedFriend(null);
+  }
   return (
     <div className="flex py-12 px-40 gap-20	h-screen">
       <div className="flex gap-10 ">
@@ -58,7 +72,12 @@ function App() {
           </Button>
         </div>
 
-        {selectedFriend && <BillSplitMenu selectedFriend={selectedFriend} />}
+        {selectedFriend && (
+          <BillSplitMenu
+            selectedFriend={selectedFriend}
+            onBillSplit={handleBillSplit}
+          />
+        )}
       </div>
     </div>
   );

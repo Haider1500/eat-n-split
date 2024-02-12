@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Button } from "./Button";
 
-export function BillSplitMenu({ selectedFriend }: any) {
+export function BillSplitMenu({ selectedFriend, onBillSplit }: any) {
   const [bill, setBill] = useState<any>("");
   const [paidByUser, setPaidByUser] = useState<any>("");
   const paidByFriend = bill - paidByUser;
@@ -9,6 +9,11 @@ export function BillSplitMenu({ selectedFriend }: any) {
 
   function handleFormSubmit(e: any) {
     e.preventDefault();
+    if (!bill || !paidByUser) {
+      return;
+    }
+    const value = whoPayBill == "user" ? paidByFriend : -paidByUser;
+    onBillSplit(value);
   }
 
   return (
@@ -33,7 +38,12 @@ export function BillSplitMenu({ selectedFriend }: any) {
         type="number"
         name="user"
         value={paidByUser}
-        onChange={(e) => setPaidByUser(Number(e.target.value))}
+        onChange={(e) => {
+          console.log(Number(e.target.value));
+          Number(e.target.value) > bill
+            ? paidByUser
+            : setPaidByUser(Number(e.target.value));
+        }}
       />
       <label htmlFor="">{selectedFriend.name}'s expense</label>
       {/* <input type="number" disabled name="friendBill" /> */}
